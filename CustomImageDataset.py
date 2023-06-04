@@ -1,4 +1,5 @@
 import torch
+from torchvision import transforms
 from torchvision.io import read_image
 import os
 import pandas as pd
@@ -9,8 +10,15 @@ import torchvision.transforms.functional as TF
     0:'Israel',
 }'''
 state_labels = {
-    'Israel':0,
-    'Lebanon':1
+    'Cyprus':0,
+    'Egypt':1,
+    'Greece':2,
+    'Israel':3,
+    'Italy':4,
+    'Jordan':5,
+    'None':6,
+    'Spain':7,
+    'Turkey':8
 }
 
 
@@ -34,6 +42,7 @@ class CustomImageDataset(Dataset):
                             self.images.append(image_path)
                             self.labels.append(state_labels.get(sub_dir))
 
+
     def __len__(self):
         return len(self.images)
 
@@ -41,8 +50,12 @@ class CustomImageDataset(Dataset):
         image_path = self.images[idx]
         image = read_image(image_path)
         label = self.labels[idx]
-
+        if self.transform:
+            image = self.transform(image)
+            return image,label
         image = image.to(torch.float32)
         resized_tensor = TF.resize(image, (32, 32))
         normalized_tensor = TF.normalize(resized_tensor, mean=0.5, std=0.5)
+
         return normalized_tensor, label
+

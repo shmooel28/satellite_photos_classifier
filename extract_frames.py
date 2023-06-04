@@ -1,4 +1,5 @@
 #python extract_frames.py source_path output_path --frame_interval 3
+import random
 
 import cv2
 import argparse
@@ -13,7 +14,8 @@ def extract_frames(video_path, output_path, frame_interval):
 
     while success:
         # Save the frame to the output path
-        output_frame_path = f"{output_path}/frame_{frame_count}.jpg"
+        random_num = random.randint(0,10000)
+        output_frame_path = f"{output_path}/frame_{random_num}{frame_count}.jpg"
         cv2.imwrite(output_frame_path, frame)
 
         # Move to the next frame

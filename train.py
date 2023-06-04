@@ -2,12 +2,14 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
+from torchvision import transforms
 
 from CustomImageDataset import CustomImageDataset
 from Classifier import Classifier
 
 from sklearn.model_selection import train_test_split
 import logging
+class_labels = ['Cyprus', 'Egypt', 'Greece', 'Israel', 'Italy', 'Jordan', 'None','Spain','Turkey']
 
 # Set up logging
 logging.basicConfig(filename='training.log', level=logging.INFO, format='%(asctime)s - %(message)s')
@@ -17,8 +19,8 @@ logging.basicConfig(filename='training.log', level=logging.INFO, format='%(ascti
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 learning_rate = 0.001
-batch_size = 64
-num_epochs = 10
+batch_size = 32
+num_epochs = 20
 
 model = Classifier().to(device)
 
@@ -26,7 +28,19 @@ model = Classifier().to(device)
 loss_fn = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-dataset = CustomImageDataset(main_dir="D:\Capital City")
+
+transformations = [
+                transforms.ToPILImage(),
+                transforms.Resize((32, 32)),
+                transforms.RandomRotation(degrees=40),
+                transforms.RandomVerticalFlip(p=0.05),
+                transforms.RandomHorizontalFlip(p=0.5),
+                transforms.RandomGrayscale(p=0.3),
+                transforms.RandomInvert(p=0.1),
+                transforms.ToTensor(),
+            ]
+transform = transforms.Compose(transformations)
+dataset = CustomImageDataset(main_dir="D:\Capital City",transform=transform)
 print(len(dataset))
 # Split the dataset into training and validation sets
 train_data, valid_data = train_test_split(dataset, test_size=0.2, random_state=42)
@@ -35,14 +49,34 @@ train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 valid_loader = DataLoader(valid_data, batch_size=batch_size)
 
 
+class_counts = [0] * 9
+for _, label in train_data:
+    class_counts[label] += 1
+
+count = 0
+for class_count in class_counts:
+    print(class_labels[count]," = ",class_count)
+    count+=1
+class_weights = []
+total_samples = len(train_data)
+for class_count in class_counts:
+    class_weight = 1 / (class_count / total_samples)
+    class_weights.append(class_weight)
+class_weights = torch.tensor(class_weights)
+class_weights = class_weights.to(device)
+
+
 def tran_loop(dataloader, model, loss_fn,optimizer):
     size = len(dataloader.dataset)
     for batch, (X,y) in enumerate(dataloader):
         pred = model(X)
         loss = loss_fn(pred,y)
 
+        weights = class_weights[y]
+        weighted_loss = torch.mean(loss * weights)
+
         optimizer.zero_grad()
-        loss.backward()
+        weighted_loss.backward()
         optimizer.step()
 
         if batch % 100 == 0:

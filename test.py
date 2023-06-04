@@ -13,9 +13,18 @@ from Classifier import Classifier
 model = Classifier()
 model.load_state_dict(torch.load('model.pth'))
 model.eval()
-
+state_labels = {
+    'Israel':0,
+    'Lebanon':1,
+    'Cyprus':2,
+    'Greece':3,
+    'Egypt':4,
+    'Italy':5,
+    'Spain':6,
+    'Jordan':7
+}
 # Define the class labels
-class_labels = ['Israel',"Lebanon"]
+class_labels = ['Cyprus', 'Egypt', 'Greece', 'Israel', 'Italy', 'Jordan', 'None','Spain','Turkey']
 
 # Get the image path from the command line argument
 image_path = sys.argv[1]
