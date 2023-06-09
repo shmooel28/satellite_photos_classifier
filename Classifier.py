@@ -15,7 +15,7 @@ class Classifier(nn.Module):
         self.fc_layers = nn.Sequential(
             nn.Linear(64 * 8 * 8, 128),
             nn.ReLU(inplace=True),
-            nn.Linear(128, 9)
+            nn.Linear(128, 18)
         )
 
     def forward(self, x):

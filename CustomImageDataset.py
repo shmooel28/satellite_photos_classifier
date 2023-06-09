@@ -21,10 +21,24 @@ state_labels = {
     'Turkey':8
 }
 city_label = {
-    'Ashdod':0,
-    'Hebron':1,
-    'Jerusalem':2,
-    'Tel-Aviv':3
+    'Ariel':0,
+    'Ashdod':1,
+    'Barkan':2,
+    "Be'er-Sheva":3,
+    'Hebron':4,
+    'Holon':5,
+    'Jerusalem':6,
+    'Kiryat Gat':7,
+    'Negev':8,
+    'Petah-Tikva':9,
+    'Rahat':10,
+    'Ramat-Gan':11,
+    'Rishon LeZion':12,
+    'Road60':13,
+    'Rosh-HaAyin':14,
+    'Tel-Aviv':15,
+    'Yavne':16,
+    'Yeruham':17
 }
 
 class CustomImageDataset(Dataset):

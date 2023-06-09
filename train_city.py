@@ -15,8 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
 
-class_labels = ['Ashdod', 'Hebron', 'Jerusalem', 'Tel-Aviv']
-
+class_labels = ['Ariel','Ashdod','Barkan',"Be'er-Sheva",'Hebron','Holon','Jerusalem','Kiryat Gat','Negev','Petah-Tikva','Rahat','Ramat-Gan','Rishon LeZion','Road60','Rosh-HaAyin','Tel-Aviv','Yavne','Yeruham']
 # Set up logging
 logging.basicConfig(filename='training.log', level=logging.INFO, format='%(asctime)s - %(message)s')
 
@@ -43,7 +42,7 @@ transformations = [
     transforms.ToTensor(),
 ]
 transform = transforms.Compose(transformations)
-dataset = CustomImageDataset(main_dir="D:\Capital City\Israel\City",transform=transform)
+dataset = CustomImageDataset(main_dir="D:\Capital City\Israel\City")
 print(len(dataset))
 # Split the dataset into training and validation sets
 train_data, valid_data = train_test_split(dataset, test_size=0.2, random_state=42)
@@ -51,7 +50,7 @@ train_data, valid_data = train_test_split(dataset, test_size=0.2, random_state=4
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 valid_loader = DataLoader(valid_data, batch_size=batch_size)
 
-class_counts = [0] * 4
+class_counts = [0] * 18
 for _, label in train_data:
     class_counts[label] += 1
 
@@ -173,12 +172,12 @@ plt.plot(valid_f1_scores, label='Valid F1 Score')
 plt.xlabel('Epoch')
 plt.ylabel('F1 Score')
 plt.legend()
-
+# Save the model
+model_path = 'city_model.pth'
+torch.save(model.state_dict(), model_path)
 plt.tight_layout()
 plt.show()
 
 print("Done!")
 
-# Save the model
-model_path = 'city_model.pth'
-torch.save(model.state_dict(), model_path)
+

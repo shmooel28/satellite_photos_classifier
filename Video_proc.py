@@ -16,7 +16,8 @@ model.eval()
 
 # Define the class labels
 class_labels = ['Cyprus', 'Egypt', 'Greece', 'Israel', 'Italy', 'Jordan', 'None','Spain','Turkey']
-city_labels = ['Ashdod','Hebron','Jerusalem','Tel-Aviv']
+city_labels = ['Ariel','Ashdod','Barkan',"Be'er-Sheva",'Hebron','Holon','Jerusalem','Kiryat Gat','Negev','Petah-Tikva','Rahat','Ramat-Gan','Rishon LeZion','Road60','Rosh-HaAyin','Tel-Aviv','Yavne','Yeruham']
+
 
 # Define the number of previous predictions to consider
 K = 10

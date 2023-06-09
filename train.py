@@ -171,12 +171,12 @@ plt.plot(valid_f1_scores, label='Valid F1 Score')
 plt.xlabel('Epoch')
 plt.ylabel('F1 Score')
 plt.legend()
-
+# Save the model
+model_path = 'model.pth'
+torch.save(model.state_dict(), model_path)
 plt.tight_layout()
 plt.show()
 
 print("Done!")
 
-# Save the model
-model_path = 'model.pth'
-torch.save(model.state_dict(), model_path)
+
