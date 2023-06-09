@@ -1,3 +1,5 @@
+import sys
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -13,7 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
 
-class_labels = ['Cyprus', 'Egypt', 'Greece', 'Israel', 'Italy', 'Jordan', 'None', 'Spain', 'Turkey']
+class_labels = ['Ashdod', 'Hebron', 'Jerusalem', 'Tel-Aviv']
 
 # Set up logging
 logging.basicConfig(filename='training.log', level=logging.INFO, format='%(asctime)s - %(message)s')
@@ -41,7 +43,7 @@ transformations = [
     transforms.ToTensor(),
 ]
 transform = transforms.Compose(transformations)
-dataset = CustomImageDataset(main_dir="D:\Capital City")
+dataset = CustomImageDataset(main_dir="D:\Capital City\Israel\City",transform=transform)
 print(len(dataset))
 # Split the dataset into training and validation sets
 train_data, valid_data = train_test_split(dataset, test_size=0.2, random_state=42)
@@ -49,7 +51,7 @@ train_data, valid_data = train_test_split(dataset, test_size=0.2, random_state=4
 train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
 valid_loader = DataLoader(valid_data, batch_size=batch_size)
 
-class_counts = [0] * 9
+class_counts = [0] * 4
 for _, label in train_data:
     class_counts[label] += 1
 
@@ -178,5 +180,5 @@ plt.show()
 print("Done!")
 
 # Save the model
-model_path = 'model.pth'
+model_path = 'city_model.pth'
 torch.save(model.state_dict(), model_path)

@@ -20,7 +20,12 @@ state_labels = {
     'Spain':7,
     'Turkey':8
 }
-
+city_label = {
+    'Ashdod':0,
+    'Hebron':1,
+    'Jerusalem':2,
+    'Tel-Aviv':3
+}
 
 class CustomImageDataset(Dataset):
     def __init__(self, main_dir, transform=None, target_transform=None):
@@ -41,6 +46,14 @@ class CustomImageDataset(Dataset):
                             image_path = os.path.join(sub_dir_path, file)
                             self.images.append(image_path)
                             self.labels.append(state_labels.get(sub_dir))
+            elif sub_dir in city_label:
+                print(sub_dir)
+                if os.path.isdir(sub_dir_path):
+                    for file in os.listdir(sub_dir_path):
+                        if file.endswith(".jpg") or file.endswith(".png"):
+                            image_path = os.path.join(sub_dir_path, file)
+                            self.images.append(image_path)
+                            self.labels.append(city_label.get(sub_dir))
 
 
     def __len__(self):

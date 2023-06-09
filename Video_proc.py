@@ -11,11 +11,12 @@ from Classifier import Classifier
 
 # Load the saved model
 model = Classifier()
-model.load_state_dict(torch.load('model.pth'))
+model.load_state_dict(torch.load('city_model.pth'))
 model.eval()
 
 # Define the class labels
 class_labels = ['Cyprus', 'Egypt', 'Greece', 'Israel', 'Italy', 'Jordan', 'None','Spain','Turkey']
+city_labels = ['Ashdod','Hebron','Jerusalem','Tel-Aviv']
 
 # Define the number of previous predictions to consider
 K = 10
@@ -32,7 +33,7 @@ for frame in video:
     break
 
 # Define the output video path
-output_path = 'output_video(2).mp4'
+output_path = 'output_video.mp4'
 
 # Define the codec for output video
 #fourcc = 'mp4v'
@@ -68,7 +69,7 @@ for frame in video:
         output = model(normalized_tensor.unsqueeze(0))
         probabilities = torch.softmax(output, dim=1)
         _, predicted = torch.max(probabilities.data, 1)
-        predicted_label = class_labels[predicted.item()]
+        predicted_label = city_labels[predicted.item()]
 
     # Print the predicted label
     print(predicted_label)
@@ -87,7 +88,7 @@ for frame in video:
     predicted_average = torch.argmax(torch.from_numpy(average_predictions))
 
     # Label the frame
-    predicted_average_label = class_labels[predicted_average.item()]
+    predicted_average_label = city_labels[predicted_average.item()]
     labeled_frame = cv2.putText(frame2, predicted_average_label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     # Write the labeled frame to the output video

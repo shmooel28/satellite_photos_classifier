@@ -38,6 +38,7 @@ normalized_tensor = TF.normalize(resized_tensor, mean=0.5, std=0.5)
 # Perform the inference
 with torch.no_grad():
     output = model(normalized_tensor.unsqueeze(0))
+    print(output);
     _, predicted = torch.max(output.data, 1)
     predicted_label = class_labels[predicted.item()]
 
