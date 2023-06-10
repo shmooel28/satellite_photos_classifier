@@ -1,8 +1,9 @@
-#python extract_frames.py source_path output_path --frame_interval 3
+# python extract_frames.py source_path output_path --frame_interval 3
 import random
 
 import cv2
 import argparse
+
 
 def extract_frames(video_path, output_path, frame_interval):
     # Open the video file
@@ -14,7 +15,7 @@ def extract_frames(video_path, output_path, frame_interval):
 
     while success:
         # Save the frame to the output path
-        random_num = random.randint(0,10000)
+        random_num = random.randint(0, 10000)
         output_frame_path = f"{output_path}/frame_{random_num}{frame_count}.jpg"
         cv2.imwrite(output_frame_path, frame)
 
@@ -22,6 +23,7 @@ def extract_frames(video_path, output_path, frame_interval):
         for _ in range(frame_interval):
             success, frame = video.read()
             frame_count += 1
+
 
 if __name__ == '__main__':
     # Create the argument parser

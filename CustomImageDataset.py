@@ -1,45 +1,41 @@
 import torch
-from torchvision import transforms
 from torchvision.io import read_image
 import os
-import pandas as pd
 from torch.utils.data import Dataset
 import torchvision.transforms.functional as TF
 
-'''state_labels = {
-    0:'Israel',
-}'''
 state_labels = {
-    'Cyprus':0,
-    'Egypt':1,
-    'Greece':2,
-    'Israel':3,
-    'Italy':4,
-    'Jordan':5,
-    'None':6,
-    'Spain':7,
-    'Turkey':8
+    'Cyprus': 0,
+    'Egypt': 1,
+    'Greece': 2,
+    'Israel': 3,
+    'Italy': 4,
+    'Jordan': 5,
+    'None': 6,
+    'Spain': 7,
+    'Turkey': 8
 }
 city_label = {
-    'Ariel':0,
-    'Ashdod':1,
-    'Barkan':2,
-    "Be'er-Sheva":3,
-    'Hebron':4,
-    'Holon':5,
-    'Jerusalem':6,
-    'Kiryat Gat':7,
-    'Negev':8,
-    'Petah-Tikva':9,
-    'Rahat':10,
-    'Ramat-Gan':11,
-    'Rishon LeZion':12,
-    'Road60':13,
-    'Rosh-HaAyin':14,
-    'Tel-Aviv':15,
-    'Yavne':16,
-    'Yeruham':17
+    'Ariel': 0,
+    'Ashdod': 1,
+    'Barkan': 2,
+    "Be'er-Sheva": 3,
+    'Hebron': 4,
+    'Holon': 5,
+    'Jerusalem': 6,
+    'Kiryat Gat': 7,
+    'Negev': 8,
+    'Petah-Tikva': 9,
+    'Rahat': 10,
+    'Ramat-Gan': 11,
+    'Rishon LeZion': 12,
+    'Road60': 13,
+    'Rosh-HaAyin': 14,
+    'Tel-Aviv': 15,
+    'Yavne': 16,
+    'Yeruham': 17
 }
+
 
 class CustomImageDataset(Dataset):
     def __init__(self, main_dir, transform=None, target_transform=None):
@@ -69,7 +65,6 @@ class CustomImageDataset(Dataset):
                             self.images.append(image_path)
                             self.labels.append(city_label.get(sub_dir))
 
-
     def __len__(self):
         return len(self.images)
 
@@ -79,10 +74,9 @@ class CustomImageDataset(Dataset):
         label = self.labels[idx]
         if self.transform:
             image = self.transform(image)
-            return image,label
+            return image, label
         image = image.to(torch.float32)
         resized_tensor = TF.resize(image, (32, 32))
         normalized_tensor = TF.normalize(resized_tensor, mean=0.5, std=0.5)
 
         return normalized_tensor, label
-

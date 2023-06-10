@@ -31,7 +31,6 @@ model = Classifier().to(device)
 loss_fn = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-
 transformations = [
     transforms.ToPILImage(),
     transforms.Resize((32, 32)),
@@ -41,8 +40,8 @@ transformations = [
     transforms.ToTensor(),
 ]
 transform = transforms.Compose(transformations)
-dataset = CustomImageDataset(main_dir="D:\Capital City")
-print(len(dataset))
+dataset = CustomImageDataset(main_dir="D:\Capital City", transform=transform)
+
 # Split the dataset into training and validation sets
 train_data, valid_data = train_test_split(dataset, test_size=0.2, random_state=42)
 
@@ -178,5 +177,3 @@ plt.tight_layout()
 plt.show()
 
 print("Done!")
-
-

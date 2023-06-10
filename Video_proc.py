@@ -1,13 +1,9 @@
 import torch
 import cv2
-from torchvision.io import VideoReader, write_video
-from torchvision.transforms.functional import normalize
+from torchvision.io import VideoReader
 import sys
 import torchvision.transforms.functional as TF
-from PIL import Image
 from Classifier import Classifier
-
-# Assuming you have the Classifier class and the path to the saved model
 
 # Load the saved model
 model = Classifier()
@@ -36,11 +32,7 @@ for frame in video:
 # Define the output video path
 output_path = 'output_video.mp4'
 
-# Define the codec for output video
-#fourcc = 'mp4v'
 
-#output_video = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*fourcc), video.get_metadata()["video"]["fps"], (frames[0].size()[1], frames[0].size()[2]))
-#output_video = write_video(output_path, video["data"], video.get_metadata()["video"]["fps"], fourcc)
 video2 = cv2.VideoCapture(video_path)
 frame_width = int(video2.get(cv2.CAP_PROP_FRAME_WIDTH))
 frame_height = int(video2.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -58,10 +50,6 @@ for frame in video:
     frame = frame['data'].float()
     ret, frame2 = video2.read()
 
-    # Convert frame to PIL Image
-
-    # Preprocess the frame
-    #tensor = TF.to_tensor(frame)
     resized_tensor = TF.resize(frame, (32, 32))
     normalized_tensor = TF.normalize(resized_tensor, mean=0.5, std=0.5)
 
@@ -98,15 +86,3 @@ for frame in video:
 # Release resources
 video2.release()
 output_video.release()
-    #labeled_frame = cv2.putText(frame.numpy().astype('uint8'), predicted_average_label, (10, 30),
-                              #  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-    # Write the labeled frame to the output video
-    #output_video.write(frame)
-
-# Release resources
-#video.close()
-#output_video.release()
-
-
-# Release resources
